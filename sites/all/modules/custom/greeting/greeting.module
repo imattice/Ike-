@@ -1,0 +1,58 @@
+<?php
+function greeting_menu() {
+  $items = array();
+  $items['hello_friend'] = array(
+    'title' => 'Hello Friend!',
+    'page callback' => 'say_hello',
+    'access callback' => TRUE,
+    'type' => MENU_CALLBACK,
+  );
+
+  $items['goodbye_friend_admin'] = array(
+    'title' => "Goodbye Friend!",
+    'page callback' => 'say_goodbye_admin',
+    'access callback' => TRUE,
+    'type' => MENU_CALLBACK,
+  );
+
+  $items['goodbye_friend_authenticated'] = array(
+    'title' => "Goodbye Friend!",
+    'page callback' => 'say_goodbye_auth',
+    'access callback' => TRUE,
+    'type' => MENU_CALLBACK,
+  );
+  return $items;
+}
+
+
+//functions
+function say_hello() {
+  GLOBAL $user;
+  if(in_array('administrator', $user->roles)) {
+      return '<p>Welcome to the Admin view!</p>';
+  } elseif (in_array('authenticated user', $user->roles)) {
+      return '<p>Nice to see you!</p>';
+  };
+}
+
+function say_goodbye_admin() {
+  return '<p>Bye bye bye!</p>';
+}
+
+function say_goodbye_auth() {
+  return '<p>Come back soon!</p>';
+}
+
+//hooks
+function greeting_user_login() {
+  $_GET['destination'] = 'hello_friend';
+}
+
+function greeting_user_logout() {
+  GLOBAL $user;
+  if(in_array('administrator', $user->roles)) {
+    $_GET['destination'] = 'goodbye_friend_admin';
+  } elseif (in_array('authenticated user', $user->roles)) {
+    $_GET['destination'] = 'goodbye_friend_authenticated';
+  };
+}

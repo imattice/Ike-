@@ -1,0 +1,6 @@
+
+name = Simple Contact
+description = removes option to send email to self and removes subject line in contact form
+package = Practice Modules
+core = 7.x
+files[] = simple_contact.module

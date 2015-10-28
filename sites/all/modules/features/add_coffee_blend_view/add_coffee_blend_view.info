@@ -1,0 +1,7 @@
+name = Add coffee blend view
+description = add coffee blend view
+core = 7.x
+package = Features
+version = 7.x-2.7
+features[features_api][] = api:2
+project path = sites/all/modules/features

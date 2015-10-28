@@ -1,0 +1,21 @@
+<?php
+
+function pet_menu()
+{
+    $items = [];
+    $items['pet'] = [
+        'title' => 'My Pet',
+        'page callback' => 'pet_display',
+        'access callback' => TRUE,
+        'type'=> MENU_NORMAL_ITEM,
+    ];
+    return $items;
+}
+
+function pet_display() {
+    return '
+        <img src = "https://c2.staticflickr.com/4/3705/11354317716_11045712cd.jpg">
+        <h1>Scarffy</h1>
+        <p>I have the best dog.  It\'s name is Scarffy and it likes to eat.</p>
+    ';
+}

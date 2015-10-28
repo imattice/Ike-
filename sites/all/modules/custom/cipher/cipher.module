@@ -1,0 +1,149 @@
+<?php
+
+//routing
+    function cipher_menu() {
+        $items['cipher'] = [
+            'title' => 'Shift Cipher',
+            'page callback' =>'drupal_get_form',
+            'page arguments' => ['cipher_form'],
+            'access callback' => TRUE,
+            'type' => MENU_NORMAL_ITEM,
+        ];
+
+        $items['cipher_result_page'] = [
+            'title' => 'Secret Message',
+            'page callback' => 'cipher_result',
+            'access callback' => TRUE,
+            'type' => MENU_CALLBACK,
+        ];
+
+        return $items;
+    }
+
+//form
+    function cipher_form() {
+        $form['message'] = [
+            '#title' => 'Message',
+            '#type' => 'textfield',
+            '#description' => 'Enter your secret message.',
+            '#element_validate' => ['element_validate_input'],
+            '#required' => TRUE,
+        ];
+
+        $form['direction'] = [
+            '#title' => 'Direction',
+            '#type' => 'textfield',
+            '#description' => 'Which direction would you like to encode? (left or right)',
+            '#element_validate' => ['element_validate_direction'],
+            '#required' => TRUE,
+        ];
+
+        $form['shift'] = [
+            '#title' => 'Shift',
+            '#type' => 'textfield',
+            '#description' => 'How much would you like your message to shift?',
+            '#element_validate' => ['element_validate_value'],
+            '#required' => TRUE,
+        ];
+
+        $form['submit'] = [
+            '#type' => 'submit',
+            '#value' => 'Shhh!',
+        ];
+        return $form;
+    }
+
+//creates cipher on submit
+    function cipher_form_submit($form, &$form_state) {
+        //transform form inputs into variables we can work with
+            $message = $form_state['values']['message'];
+            $direction = $form_state['values']['direction'];
+            $shift = $form_state['values']['shift'];
+
+        //logic variables
+            $alphabet = range('a', 'z');
+            $cipher = '';
+
+        //logic
+            // determines if we are ciphering to the left or right, making the value of $shift either positive (moving right) or negative (moving left)
+            if ($direction == 'left'){
+                $shift_modifier = (-1);
+            } elseif ($direction == 'right') {
+                $shift_modifier = 1;
+            };
+
+            //lowercase message, split message into individual letters
+            $lower_message = strtolower($message);
+            $letters =  str_split($lower_message);
+
+            //go through each letter in the letters array
+            foreach ($letters as $letter) {
+
+                //if the letter is in array...
+                if (in_array($letter, $alphabet)) {
+
+                    //find the index
+                    $index = array_search($letter, $alphabet);
+
+                    //shift the index by the shift amount
+                    $shifted_index = ($index + ($shift*$shift_modifier));
+
+                        //if the new idex goes beyond the scope of the array, find the equivlent that would return the same letter
+                        if ($shifted_index < 0) {
+                            $shifted_index += 26;
+                        } elseif ($shifted_index > 25) {
+                            $shifted_index -= 26;
+                        }
+
+                        // $final_index = ($shifted_index*-1);
+                        // var_dump($shifted_index);
+
+                    $cipher .= $alphabet[$shifted_index];
+                } else {
+                    $cipher .=$letter;
+                };
+            };
+
+        //store result of logic into session variable
+        $_SESSION['result'] = $cipher;
+
+        //redirect to result page once logic is complete
+        $form_state['redirect'] = 'cipher_result_page';
+    }
+
+//result page
+    function cipher_result() {
+        $cipher = $_SESSION['result'];
+
+        return " \" $cipher \" ";
+    }
+
+
+
+//custom validations
+    function element_validate_input($element) {
+        $alphabet = range('a', 'z');
+        array_push($alphabet, ' ', '.', '!', '?', '"', "'");
+
+        $lower_message = strtolower($element['#value']);
+        $letters =  str_split($lower_message);
+        foreach ($letters as $letter){
+            if (!(in_array($letter, $alphabet))) {
+                form_error($element, 'Please exclude any weird letters.');
+            }
+        }
+    }
+
+    function element_validate_value($element) {
+        if (($element['#value'] < 1) || ($element['#value'] >25)) {
+            form_error($element, 'Please enter a number from 1 - 25.');
+        }
+    }
+
+    function element_validate_direction($element) {
+        $direction = strtolower($element['#value']);
+
+        if (!(( $direction == 'left') || ( $direction == 'right'))) {
+            form_error($element, 'Please enter either left or right.');
+        }
+    }

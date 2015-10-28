@@ -1,0 +1,61 @@
+<?php
+
+function favorites_menu()
+{
+    $items = [];
+    $items['movies'] = [
+        'title' => 'Favorite movies',
+        'page callback' => 'movies_display',
+        'access callback' => TRUE,
+        'type' => MENU_NORMAL_ITEM
+    ];
+
+    $items['songs'] = [
+        'title' => 'Favorite songs',
+        'page callback' => 'songs_display',
+        'access callback' => TRUE,
+        'type' => MENU_NORMAL_ITEM
+    ];
+
+    $items['books'] = [
+        'title' => 'Favorite books',
+        'page callback' => 'books_display',
+        'access callback' => TRUE,
+        'type' => MENU_NORMAL_ITEM
+    ];
+
+    return $items;
+}
+
+function movies_display()
+{
+    return '
+        <ul>
+            <li>Mary and Max</li>
+            <li>Matt Damon</li>
+            <li>A Dugimon Movie</li>
+        </ul>
+    ';
+}
+
+function songs_display()
+{
+    return '
+        <ul>
+            <li>Happy Birthday</li>
+            <li>The OTHER Happy Birthday</li>
+            <li>Happy Birthday the Remix ft: Drake</li>
+        </ul>
+    ';
+}
+
+function books_display()
+{
+    return '
+        <ul>
+            <li>Yo Yo Ma biography</li>
+            <li>Fifty Shades of Ipsum</li>
+            <li>The Bibble</li>
+        </ul>
+    ';
+}

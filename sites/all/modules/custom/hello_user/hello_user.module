@@ -1,0 +1,19 @@
+<?php
+function hello_user_menu() {
+  $items = array();
+  $items['hello_user'] = array(
+    'title' => 'Welcome new user!',
+    'page callback' => 'account_success',
+    'access callback' => TRUE,
+    'type' => MENU_CALLBACK,
+  );
+  return $items;
+}
+
+function account_success() {
+  return '<p>Welcome to the site!</p>';
+}
+
+function hello_user_user_insert() {
+  $_GET['destination'] = 'hello_user';
+}

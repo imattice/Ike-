@@ -1,0 +1,24 @@
+<?php
+
+function follow_extension_follow_networks_alter(&$networks, $uid = 0) {
+    //Add a network
+        $networks[$uid]['imdb'] = [
+            'title' => t('IMDB'),
+            'domain' => 'imdb.com',
+        ];
+
+        $networks[$uid]['drupal'] = [
+            'title' => t('Drupal.org'),
+            'domain' => 'drupal.org',
+        ];
+
+        $networks[$uid]['etsy'] = [
+            'title' => t('Etsy'),
+            'domain' => 'etsy.com',
+        ];
+
+        $networks[$uid]['redbubble'] = [
+            'title' => t('Redbubble'),
+            'domain' => 'redbubble.com',
+        ];
+}

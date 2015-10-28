@@ -1,0 +1,23 @@
+<?php
+
+function simple_contact_form_alter(&$form, &$form_state, $form_id) {
+    // print_r($form_id);
+    if($form_id == 'contact_site_form'){
+        //prints the code for the form
+            // print '<pre>';
+            // print_r ($form);
+            // print '</pre>';
+
+        //completely removes a field
+            // unset($form['subject']);
+            // unset($form['copy']);
+
+        //hides email subject line and sets default subject to "Feedback"
+            $form['subject']['#value'] = 'Feedback';
+            $form['subject']['#access'] = 0;
+            
+        //hides option to send copy of email to own address and sets it to do so by default
+            $form['copy']['#value'] = 1;
+            $form['copy']['#access'] = 0;
+    }
+}

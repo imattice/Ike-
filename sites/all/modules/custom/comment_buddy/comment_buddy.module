@@ -1,0 +1,41 @@
+<?php
+
+function comment_buddy_menu() {
+  $items = [];
+  $items['comment_add'] = [
+    'title' => 'Comment Buddy',
+    'page callback' => 'comment_buddy_comment_insert',
+    'access callback' => TRUE,
+    'type' => MENU_CALLBACK,
+  ];
+
+  $items['comment_edit'] = [
+    'title' => 'Comment Buddy',
+    'page callback' => 'comment_buddy_comment_update',
+    'access callback' => TRUE,
+    'type' => MENU_CALLBACK,
+  ];
+
+  $items['comment_delete'] = [
+    'title' => 'Comment Buddy',
+    'page callback' => 'comment_buddy_comment_delete',
+    'access callback' => TRUE,
+    'type' => MENU_CALLBACK,
+  ];
+
+  return $items;
+}
+
+
+//hooks
+function comment_buddy_comment_insert() {
+  return drupal_set_message('Thank you! Comment submitted!','status',FALSE);
+}
+
+function comment_buddy_comment_update() {
+  return drupal_set_message('Your comment has been changed.');
+}
+
+function comment_buddy_comment_delete() {
+  return drupal_set_message('Comment deleted. Good work eating your words.');
+}

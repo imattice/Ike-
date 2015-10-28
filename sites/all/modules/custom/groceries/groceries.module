@@ -1,0 +1,66 @@
+<?php
+
+function groceries_menu() {
+    $items = [];
+    $items['groceries'] = [
+        'title' => 'Grocery List',
+        'type' => MENU_NORMAL_ITEM,
+        'access callback' => TRUE,
+        'page callback' => 'drupal_get_form',
+        'page arguments' => array('grocery_form'),
+    ];
+
+    $items['grocery_list_display'] = [
+        'title' => 'Grocery Display',
+        'type' => MENU_CALLBACK,
+        'access callback' => TRUE,
+        'page callback' => 'grocery_list_display'
+    ];
+
+    return $items;
+}
+
+function grocery_form()
+{
+    $form = [];
+    $form['grocery'] = [
+        '#title' => 'Food',
+        '#type' => 'textfield',
+        '#description' => t('Please enter the food you want to buy')
+    ];
+
+    $form['price'] = [
+        '#title' => 'Price',
+        '#type' => 'textfield',
+        '#description' => t('Enter the price of the item')
+    ];
+
+    $form['submit'] = [
+        '#type' => 'submit',
+        '#value' => 'Submit'
+    ];
+
+    return $form;
+}
+
+function grocery_form_submit($form, &$form_state)
+{
+    if(empty($_SESSION['grocery_list'])) {
+        $_SESSION['grocery_list'] = [];
+    }
+    $food = $form_state['values']['grocery'];
+    $price = floatval($form_state['values']['price']);
+    //$_SESSION['grocery_list'][$food] = $price;
+    array_push($_SESSION['grocery_list'], [$food, $price]);
+    $form_state['redirect'] = 'grocery_list_display';
+}
+
+function grocery_list_display()
+{
+    $list = "<ul>";
+    foreach($_SESSION['grocery_list'] as $grocery) {
+        $list = $list . '<li>' . $grocery[0] . ' Price: $' . $grocery[1] . '</li>';
+    }
+    $list = $list . "</ul>";
+    return $list;
+}

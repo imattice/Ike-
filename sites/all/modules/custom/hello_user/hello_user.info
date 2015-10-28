@@ -1,0 +1,5 @@
+name = Hello User
+description = Display greetings for new user.
+package = Practice Modules
+core = 7.x
+files[] = hello_user.module

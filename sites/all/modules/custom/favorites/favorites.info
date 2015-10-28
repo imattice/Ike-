@@ -1,0 +1,5 @@
+name = Favorites
+description = its a favorites
+package = Practice Modules
+core = 7.x
+files[] = favorites.module

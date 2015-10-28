@@ -1,0 +1,5 @@
+name = Follow - Custom Extension
+description = Adds links to additional websites
+package = Practice Modules
+core = 7.x
+files[] = follow_extension.module, follow_extension.css

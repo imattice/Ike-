@@ -1,0 +1,5 @@
+name = Comment Buddy
+description = displays messages when user creates, edits, or deletes comments
+package = Practice Modules
+core = 7.x
+files[] = comment_buddy.module

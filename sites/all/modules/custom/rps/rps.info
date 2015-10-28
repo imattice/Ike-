@@ -1,0 +1,5 @@
+name = Rock Paper Scissors
+description = Allows user to play a game of rock paper scissors and see outcome.
+package = Practice Modules
+core = 7.x
+files[] = rps.module

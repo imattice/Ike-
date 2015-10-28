@@ -1,0 +1,99 @@
+<?php
+//routing
+    function rps_menu(){
+        $items['player_one'] = array(
+            'title' => 'Rock Paper Scissors',
+            'page callback' => 'drupal_get_form',
+            'page arguments' => array('rps_form'),
+            'access callback' => TRUE,
+            'type' => MENU_NORMAL_ITEM,
+        );
+
+        $items['player_two'] = array(
+            'title' => 'Rock Paper Scissors',
+            'page callback' => 'drupal_get_form',
+            'page arguments' => array('rps_player_two_form'),
+            'access callback' => TRUE,
+            'type' => MENU_CALLBACK,
+        );
+
+        $items['rps_success_page'] = array(
+            'title' => 'The victor is...',
+            'page callback' => 'rps_success',
+            'access callback' => TRUE,
+            'type' => MENU_CALLBACK,
+        );
+        return $items;
+    }
+
+//forms
+    function rps_form() {
+        $form['player_one'] = [
+            '#title' => t('Player One'),
+            '#type' => 'textfield',
+            '#description' => t('Rock, Paper, or Scissors?'),
+            '#element_validate' => ['element_validate_spelling'],
+            '#required' => TRUE,
+        ];
+
+        $form['submit'] = [
+            '#type' => 'submit',
+            '#value' => 'Go to Player 2 choice selection (don\'t look!)',
+        ];
+        return $form;
+    }
+    //submit
+    function rps_form_submit($form, &$form_state) {
+        $player_one = strtolower($form_state['values']['player_one']);
+        $_SESSION['one_choice'] = $player_one;
+
+        $form_state['redirect'] = 'player_two';
+    }
+
+    function rps_player_two_form() {
+        $form['player_two'] = [
+            '#title' => t('Player Two'),
+            '#type' => 'textfield',
+            '#description' => t('Rock, Paper, or Scissors?'),
+            '#element_validate' => ['element_validate_spelling'],
+            '#required' => TRUE,
+        ];
+
+        $form['submit'] = [
+            '#type' => 'submit',
+            '#value' => 'Fight!',
+        ];
+        return $form;
+    }
+    //submit & logic
+    function rps_player_two_form_submit($form, &$form_state) {
+        $player_two = strtolower($form_state['values']['player_two']);
+        $result = "";
+
+        if (($_SESSION['one_choice'] == "rock" && $player_two == "scissors") || ($_SESSION['one_choice'] == "scissors" && $player_two == "paper") || ($_SESSION['one_choice'] == "paper" && $player_two == "rock")) {
+            $result = "Player 1";
+        } elseif (($_SESSION['one_choice'] == "rock" && $player_two == "paper") || ($_SESSION['one_choice'] == "scissors" && $player_two == "rock") || ($_SESSION['one_choice'] == "paper" && $player_two == "scissors")) {
+           $result = "Player 2";
+        } else  {
+           $result = "Players Draw";
+        }
+
+        $_SESSION['winner_result'] = $result;
+        $form_state['redirect'] = 'rps_success_page';
+    }
+
+//runs success page and winner
+    function rps_success() {
+        $winner = $_SESSION['winner_result'];
+        return $winner . '!';
+    }
+
+//custom validation
+    function element_validate_spelling($element) {
+        $answer = strtolower($element['#value']);
+        var_dump($answer);
+
+        if (!(($answer == 'rock') || ($answer == 'paper') || ($answer == 'scissors'))){
+            form_error($element, t('You did not enter either rock, paper, or scissor!'));
+        }
+    }
