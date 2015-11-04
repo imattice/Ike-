@@ -1,0 +1,5 @@
+name = News Viewer
+description = display nodes with Ajax
+package = Practice Modules
+core = 7.x
+files[] = news_viewer.module
